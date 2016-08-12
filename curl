@@ -1,0 +1,64 @@
+#include<string>
+#include<iostream>
+#include<stdio.h>
+#include"../include/curl.h"
+#pragma comment(lib,"libcurl_imp.lib")
+FILE *fp;
+size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream)
+{
+	int written = fwrite(ptr, size, nmemb, (FILE *)fp);
+	return written;
+}
+using namespace std;
+int main() {
+	cout << "输入请求的url,如果有get参数，加上更为准确" << endl;
+	string url;
+	cin >> url;
+	if (url.find("http://") == string::npos && url.find("HTTP://") == string::npos&&
+		url.find("https://") == string::npos && url.find("HTTPS://") == string::npos) {
+		url = "http://" + url;
+	}
+	CURL *curl;
+	CURLcode res;
+	while(1)
+	{ 
+		curl = curl_easy_init();
+		if (curl)
+		{
+			curl_easy_setopt(curl, CURLOPT_URL,
+				url.c_str());
+			struct curl_slist *headers = NULL;
+			headers = curl_slist_append(headers, "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+			headers = curl_slist_append(headers, "Connection: keep-alive");
+			headers = curl_slist_append(headers, "User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36");
+			headers = curl_slist_append(headers, "Accept-Language: zh-CN,zh;q=0.8");
+			headers = curl_slist_append(headers, "Accept-Encoding: gzip, deflate, sdch");
+			curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);// 改协议头
+			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, FALSE); //可支持https,不验证证书
+			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, FALSE); //可支持https,不验证证书
+			curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
+			curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
+			fp = fopen("index.tmp", "wb");
+			clock_t begin = clock();
+			res = curl_easy_perform(curl);
+			if (res != CURLE_OK) {
+				fprintf(stderr, "curl_easy_perform() failed: %s\n",
+					curl_easy_strerror(res));
+				fclose(fp);
+				Sleep(2000);
+				continue;
+			}
+			cout << "从 "<<url<<" 接收完成，耗时:" << clock() - begin << "毫秒\n" << endl;
+			fclose(fp);
+			CopyFile("index.tmp", "index.html", FALSE);
+			Sleep(1000);
+			curl_easy_cleanup(curl);
+		}
+		else {
+			cout << "未知错误" << endl;
+			break;
+		}
+	}
+	return 0;
+	system("pause");
+}
