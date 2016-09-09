@@ -1,0 +1,2 @@
+启动时带命令参数 
+--ppapi-flash-path="plugins\pepflashplayer.dll" --ppapi-flash-version=22.0.0.209
