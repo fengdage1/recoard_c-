@@ -1,2 +1,11 @@
 启动时带命令参数 
 --ppapi-flash-path="plugins\pepflashplayer.dll" --ppapi-flash-version=22.0.0.209
+
+或者
+void SimpleApp::OnBeforeCommandLineProcessing(const CefString& process_type, CefRefPtr<CefCommandLine> command_line)
+{
+	//加载flash插件
+	command_line->AppendSwitchWithValue("--ppapi-flash-path", "plugins\\pepflashplayer.dll");
+	//manifest.json中的version
+	//command_line->AppendSwitchWithValue("--ppapi-flash-version", "18.0.0.209");
+}
