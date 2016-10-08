@@ -1,0 +1,1 @@
+SetErrorMode(SEM_NOGPFAULTERRORBOX);
