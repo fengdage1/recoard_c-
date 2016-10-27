@@ -1,0 +1,30 @@
+//test.h
+include<stdio.h>
+void say(char *word);
+//test.c
+include "test.h"
+void say(char* word){
+  printf("%s\n",word);
+}
+//
+gcc -shared -fPIC -o libtest.so test.c
+
+
+//调用
+//main.c
+include<dlfcn.h>
+int main(){
+    void *dp;
+    void (*say)(char *);
+    dp = dlopen("./libtest.so",RTLD_LAZY);
+    if(dp == 0){
+      return -1;
+    }
+    say = dlsym(dp,"say");
+    say("my first so test");
+    dlclose(dp);
+    return 0;
+}
+//
+gcc -o main main.c -ldl
+
