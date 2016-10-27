@@ -1,0 +1,15 @@
+DIR *pDir;
+struct dirent *file; //readdir函数的返回值就存放在这个结构体中
+struct dirent* ent = NULL;
+if (!(pDir = opendir(pakPath.c_str())))
+{
+   printf("error opendir %s!!!\n", pakPath.c_str());
+   return -1;
+}
+while (NULL != (ent = readdir(pDir)))
+{
+   if(ent->d_reclen == 36 && ent->d_type == 8) //这只是一种文件类型
+   {
+      std::string fileName = ent->d_name;
+   }
+}
