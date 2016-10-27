@@ -1,3 +1,4 @@
+//普通c文件生成动态库
 //test.h
 include<stdio.h>
 void say(char *word);
@@ -9,6 +10,8 @@ void say(char* word){
 //
 gcc -shared -fPIC -o libtest.so test.c
 
+//用静态库和c文件生成so
+gcc bspatch.c -L. -lmybz2 -shared -fPIC -o libbspatch.so   //当前目录下有一个叫libmyzb2.a的静态库
 
 //调用
 //main.c
