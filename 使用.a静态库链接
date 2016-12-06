@@ -1,0 +1,1 @@
+gcc -o bspatch bspatch.c libbz2.a  //都在同一目录下， 有一个叫libbz2.a的静态库
