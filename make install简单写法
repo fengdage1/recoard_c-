@@ -1,7 +1,7 @@
+//直接执行make命令，编译安装一键进行
 all:
 	gcc -O3 -o bspatch bspatch.c libbz2.a
 	gcc -O3 -o bsdiff bsdiff.c libbz2.a
-install:
 	install -d /usr/bin
 	install -m 0755 bspatch /usr/bin
 	install -m 0755 bsdiff /usr/bin
